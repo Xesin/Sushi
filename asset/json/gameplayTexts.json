@@ -1,0 +1,41 @@
+﻿{
+  "en": {
+    "score": "Score: ",
+    "score_title": "Time out!",
+    "your_score": "Your score",
+    "high_score": "Best\nscore",
+    "nice": "Nice!",
+    "come_on": "Come on!",
+    "good_job": "Good job!"
+  },
+
+  "es": {
+    "score": "Puntuación: ",
+    "score_title": "¡Se acabó!",
+    "your_score": "Tu puntuación",
+    "high_score": "Tu\nrecord",
+    "nice": "Bien!",
+    "come_on": "Venga vamos!",
+    "good_job": "Bien hecho!"
+  },
+
+  "pt": {
+    "score": "Pontuação: ",
+    "score_title": "Tempo esgotado!",
+    "your_score": "Sua pontuação: ",
+    "high_score": "Melhor\npontuação: ",
+    "nice": "Boa!",
+    "come_on": "Vamos lá!",
+    "good_job": "Bom trabalho!"
+  },
+
+  "ru": {
+    "score": "Счет: ",
+    "score_title": "Время вышло!",
+    "your_score": "Ваш счет",
+    "high_score": "Рекорд",
+    "nice": "Класс!",
+    "come_on": "Давайте!",
+  "good_job": "Отличная\nработа!!"
+  }
+}

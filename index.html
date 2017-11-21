@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="js/gl-matrix.js"></script>
+        <script type="text/javascript" src="js/core/engineCore.js"></script>
+        <script type="text/javascript" src="js/input/keyCodes.js"></script>
+        <script type="text/javascript" src="js/core/animation.js"></script>
+        <script type="text/javascript" src="js/core/animationManager.js"></script>
+        <script type="text/javascript" src="js/core/camera.js"></script>
+        <script type="text/javascript" src="js/core/maths.js"></script>
+        <script type="text/javascript" src="js/core/scaleManager.js"></script>
+        <script type="text/javascript" src="js/core/stateManager.js"></script>
+        <script type="text/javascript" src="js/core/texture.js"></script>
+        <script type="text/javascript" src="js/core/events/signal.js"></script>
+        <script type="text/javascript" src="js/core/events/signalBinding.js"></script>
+        <script type="text/javascript" src="js/core/loader/audioLoader.js"></script>
+        <script type="text/javascript" src="js/core/loader/cacheManager.js"></script>
+        <script type="text/javascript" src="js/core/loader/imageLoader.js"></script>
+        <script type="text/javascript" src="js/core/loader/jsonAtlasLoader.js"></script>
+        <script type="text/javascript" src="js/core/loader/loader.js"></script>
+        <script type="text/javascript" src="js/gameObjects/baseObject.js"></script>
+        <script type="text/javascript" src="js/gameObjects/audio.js"></script>
+        <script type="text/javascript" src="js/gameObjects/button.js"></script>
+        <script type="text/javascript" src="js/gameObjects/circle.js"></script>
+        <script type="text/javascript" src="js/gameObjects/factory.js"></script>
+        <script type="text/javascript" src="js/gameObjects/group.js"></script>
+        <script type="text/javascript" src="js/gameObjects/rect.js"></script>
+        <script type="text/javascript" src="js/gameObjects/sprite.js"></script>
+        <script type="text/javascript" src="js/gameObjects/text.js"></script>
+        <script type="text/javascript" src="js/gameObjects/tilledImage.js"></script>
+        <script type="text/javascript" src="js/input/inputManager.js"></script>
+        <script type="text/javascript" src="js/physics/physEngine.js"></script>
+        <script type="text/javascript" src="js/physics/physBody.js"></script>
+        <script type="text/javascript" src="js/renderer/shaders/ShaderCompiler.js"></script>
+        <script type="text/javascript" src="js/renderer/shaders/shader.js"></script>
+        <script type="text/javascript" src="js/renderer/shaders/simpleColor.js"></script>
+        <script type="text/javascript" src="js/renderer/shaders/CircleColor.js"></script>
+        <script type="text/javascript" src="js/renderer/shaders/spriteShader.js"></script>
+        <script type="text/javascript" src="js/renderer/renderer.js"></script>
+        <script type="text/javascript" src="js/tween/easing.js"></script>
+        <script type="text/javascript" src="js/tween/tween.js"></script>
+        <script type="text/javascript" src="js/tween/tweenManager.js"></script>
+        <script type="text/javascript" src="js/start.js"></script>
+        <script type="text/javascript" src="js/anim.js"></script>
+        <script type="text/javascript" src="js/customShader.js"></script>
+        <script type="text/javascript" src="lib/stats.min.js"></script>
+
+        <script type="text/javascript" src="js/Sushi/App.js"></script>
+        <script type="text/javascript" src="js/Sushi/SplashScreen.js"></script>
+        <script type="text/javascript" src="js/Sushi/LoadingScreen.js"></script>
+        <link rel="stylesheet" href="css/myStyle.css" type="text/css" />
+        <script id="shader-fs" type="x-shader/x-fragment">
+            precision mediump float;
+            varying lowp vec4 vColor;
+
+            void main(void) {
+              gl_FragColor = vColor;
+            }
+          </script>
+          
+          <script id="shader-vs" type="x-shader/x-vertex">
+
+            attribute vec3 aVertexPosition;
+            uniform mat4 uMVMatrix;
+            uniform mat4 uPMatrix;
+            uniform vec4 color;
+            varying lowp vec4 vColor;
+          
+            void main(void) {
+              gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+              vColor = color;
+            }
+          </script>
+    </head>
+    <body>
+        <canvas id="contenedor">
+        </canvas>
+    </body>
+    <script type="text/javascript">
+        new App();
+    </script>
+</html>

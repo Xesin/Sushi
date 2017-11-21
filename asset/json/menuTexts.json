@@ -1,0 +1,71 @@
+{
+	"en": {
+		"language": "LANGUAGE:",
+		"en": "English",
+		"es": "Spanish",
+		"pt": "Portuguese",
+		"ru": "Russian",
+		"sound": "Do you want sound?",
+		"soundLabel": "SOUND",
+		"yes": "YES",
+		"no": "NO",
+		"resetData": "Reset Data",
+		"tutorial": "Tutorial",
+		"credits": "Credits",
+		"sure": "Are you sure?",
+		"how_to_play": "Match two or more blocks with the same color.\nAchieve the best score before time runs out!"
+	},
+
+	"es": {
+		"language": "LENGUAJE:",
+		"en": "Inglés",
+		"es": "Español",
+		"pt": "Portugués",
+		"ru": "Ruso",
+		"sound": "¿Quieres sonido?",
+		"soundLabel": "SONIDO",
+		"yes": "SÍ",
+		"no": "NO",
+		"resetData": "Reiniciar datos",
+		"tutorial": "Tutorial",
+		"credits": "Creditos",
+		"sure": "¿Estás seguro?",
+		"how_to_play": "Combina dos o más bloques del mismo color.\n¡Logra la mejor puntuación antes\nde que se acabe el tiempo!"
+	},
+
+	"pt": {
+		"language": "IDIOMA:",
+		"en": "Inglês",
+		"es": "Espanhol",
+		"pt": "Português",
+		"ru": "Russo",
+		"sound": "Quer som?",
+		"soundLabel": "SOM:",
+		"yes": "SIM",
+		"no": "NÃO",
+		"resetData": "Restaurar Dados",
+		"tutorial": "Tutorial",
+		"credits": "Créditos",
+		"sure": "Tem certeza? ",
+		"how_to_play": "Combine dois ou mais blocos de mesma cor.\nConsiga a melhor pontuação antes\nde acabar o tempo!"
+
+	},
+
+	"ru": {
+		"language": "ЯЗЫК:",
+		"en": "Английский",
+		"es": "Испанский",
+		"pt": "Португальский",
+		"ru": "Русский",
+		"sound": "Вам нужен звук?",
+		"soundLabel": "ЗВУК",
+		"yes": "ДА",
+		"no": "НЕТ",
+		"resetData": "Сбросить данные",
+		"tutorial": "Учебник",
+		"credits": "Кредиты",
+		"sure": "Вы уверены?",
+		"how_to_play": "Сопоставьте два или более блока одинакового\nцвета. Установите рекорд до истечения времени!"
+
+	}
+}

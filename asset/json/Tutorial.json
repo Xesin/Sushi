@@ -1,0 +1,60 @@
+{"frames": [
+
+{
+	"filename": "Block_green",
+	"frame": {"x":1,"y":1,"w":45,"h":45},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":45},
+	"sourceSize": {"w":45,"h":45}
+},
+{
+	"filename": "Block_purple",
+	"frame": {"x":47,"y":1,"w":45,"h":45},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":45},
+	"sourceSize": {"w":45,"h":45}
+},
+{
+	"filename": "Blocks",
+	"frame": {"x":1,"y":180,"w":280,"h":187},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":280,"h":187},
+	"sourceSize": {"w":280,"h":187}
+},
+{
+	"filename": "Grid_tutorial",
+	"frame": {"x":1,"y":368,"w":314,"h":321},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":314,"h":321},
+	"sourceSize": {"w":314,"h":321}
+},
+{
+	"filename": "Hand",
+	"frame": {"x":93,"y":1,"w":136,"h":83},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":136,"h":83},
+	"sourceSize": {"w":136,"h":83}
+},
+{
+	"filename": "Text_box",
+	"frame": {"x":1,"y":85,"w":389,"h":94},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":389,"h":94},
+	"sourceSize": {"w":389,"h":94}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "Tutorial.png",
+	"format": "RGBA8888",
+	"size": {"w":391,"h":690},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:70da0b70ad6f7ab8b7d7ca53776e59e4:7e5a21005e3b88ef16607e6ed9fc4946:6eb9603cb72605e4abb26f80840be8bd$"
+}
+}
