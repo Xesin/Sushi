@@ -2,9 +2,9 @@ function App(){
 	var game = new XEngine.Game(640, 960, 'contenedor');
 	game.state.add('SplashScreen', SplashScreen);
 	game.state.add('LoadingScreen', LoadingScreen);
-	//game.state.add('SoundQuestion', SoundQuestion);
-	//game.state.add('MainMenu', MainMenu);
-	//game.state.add('Gameplay', Gameplay);
+	game.state.add('SoundQuestion', SoundQuestion);
+	game.state.add('MainMenu', MainMenu);
+	game.state.add('Gameplay', Gameplay);
 	game.scale.scaleType = XEngine.Scale.SHOW_ALL;
 	//  Now start the Game state.
 	game.state.start('SplashScreen');
@@ -55,3 +55,22 @@ App.SCORE_TITLE_STYLE = {
 	font: "38px Arial",
 	fill: '#FFFFFF'
 };
+
+var Sushi = {};
+
+Sushi.BlockColor = {
+	RED: 0,
+	YELLOW: 1,
+	GREEN: 2,
+	PURPLE: 3,
+	BLUE: 4
+}
+
+Sushi.State = {
+	TUTORIAL: 0,
+	COUNTDOWN: 1,
+	PREPARING: 2,
+	PLAYING: 3,
+	SHOWING_SCORE: 4,
+	PAUSE: 5
+}

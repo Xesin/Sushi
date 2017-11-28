@@ -46,6 +46,7 @@ LoadingScreen.prototype ={
 
 	start:function(){
 		//this.game.state.start('SoundQuestion');
+		this.game.state.start('SoundQuestion');
 	},
 
 	onLoadFile :function (progress) {
