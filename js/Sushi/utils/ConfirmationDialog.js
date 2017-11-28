@@ -16,8 +16,8 @@ ConfirmationDialog.prototypeExtends = {
 		}, 300, XEngine.Easing.BackOut, true);
 		var panel = this.game.add.sprite(0, 0, App.MENU_ITEMS_KEY, 'ConfirmationWindow');
 		panel.anchor.setTo(0.5);
-		// var questionText = this.game.add.text(this.game, panel.position.x, panel.position.y - 60, message,{font_size: 60});
-		// questionText.anchor.setTo(0.5);
+		var questionText = this.game.add.text(panel.position.x, panel.position.y - 60, message,{font_size: 32});
+		questionText.anchor.setTo(0.5);
 		var positiveButton = this.game.add.button(panel.position.x + 100, panel.position.y + 50, App.MENU_ITEMS_KEY, 'Ok', 'Ok_down', 'Ok');
 		positiveButton.onClick.addOnce(this.confirmationPressed, this);
 		positiveButton.anchor.setTo(0.5);
@@ -25,7 +25,7 @@ ConfirmationDialog.prototypeExtends = {
 		negativeButton.onClick.addOnce(this.cancelPressed, this);
 		negativeButton.anchor.setTo(0.5);
 		this.add(panel);
-		//this.add(questionText);
+		this.add(questionText);
 		this.add(positiveButton);
 		this.add(negativeButton);
 	},

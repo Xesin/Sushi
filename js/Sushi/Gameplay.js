@@ -50,8 +50,9 @@ Gameplay.prototype = {
 		var scoreBox = this.game.add.sprite(205, 70, App.GAMEPLAY_KEY, 'Score_Box');
 		scoreBox.anchor.setTo(0.5);
 		this.uiGroup.add(scoreBox);
-		// this.scoreText = this.game.add.bitmapText(scoreBox.position.x, scoreBox.position.y, App.DIGITS_WHITE_FONT, '0', 38, this.uiGroup);
-		// this.scoreText.anchor.setTo(0.5);
+		this.scoreText = this.game.add.text(scoreBox.position.x, scoreBox.position.y,  '0',{font_size: 38});
+		this.scoreText.anchor.setTo(0.5);
+		this.uiGroup.add(this.scoreText);
 		var comboBox = this.game.add.sprite(this.game.width / 2 + 80, scoreBox.position.y, App.GAMEPLAY_KEY, 'Combo_Box');
 		comboBox.anchor.setTo(0.5);
 		this.uiGroup.add(comboBox);
@@ -224,7 +225,7 @@ Gameplay.prototype = {
 				puntuation += App.POINTS_INCREASE * (i - 1);
 			}
 		}
-		//this.increaseScore(puntuation * this.currentBonus);
+		this.increaseScore(puntuation * this.currentBonus);
 		//this.showCollectedScore(puntuation, colorFont);
 	},
 
@@ -365,6 +366,11 @@ Gameplay.prototype = {
 				this.blocksArray[i][j] = null;
 			}
 		}
+	},
+
+	increaseScore:function(amount){
+		this.score += amount;
+		this.scoreText.setText(this.score);
 	}
 	
 }

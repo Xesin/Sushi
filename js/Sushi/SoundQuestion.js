@@ -7,6 +7,7 @@ SoundQuestion.prototype = {
 		this.game.add.sprite(0, 0, App.MENU_ITEMS_KEY, 'Background');
 		var confirmation = new ConfirmationDialog(this.game, 'Quieres sonido?', this.onClickYes, this.onClickNo, this);
 		this.game.add.existing(confirmation);
+		
 	},
 
 	onClickNo: function () {
