@@ -27,16 +27,15 @@ XEngine.Sprite = function (game, posX, posY, sprite, frame) {
 	
 	if(_this.game.cache.getJson(sprite) != undefined) {
 		_this.json = _this.game.cache.getJson(sprite);
+		var frameInfo = {};
 		if (typeof _this.frame === 'string') {
 			frameInfo = _this.json[_this.frame];
-			_this.width = frameInfo.frame.w;
-			_this.height = frameInfo.frame.h;
 		}
 		else {
 			frameInfo = _this.json.frames[_this.frame];
-			_this.width = frameInfo.frame.w;
-			_this.height = frameInfo.frame.h;
 		}
+		_this.width = frameInfo.frame.w;
+		_this.height = frameInfo.frame.h;
 	}
 
 	if(_this._columns > 1 || _this._rows > 1 || _this.json != undefined){
@@ -67,13 +66,9 @@ XEngine.Sprite.prototypeExtends = {
 				var frameInfo = {};
 				if (typeof _this.frame === 'string') {
 					frameInfo = _this.json[_this.frame];
-					_this.width = frameInfo.frame.w;
-					_this.height = frameInfo.frame.h;
 				}
 				else {
 					frameInfo = _this.json.frames[_this.frame];
-					_this.width = frameInfo.frame.w;
-					_this.height = frameInfo.frame.h;
 				}
 				var width = frameInfo.frame.w;
 				var height = frameInfo.frame.h;
@@ -114,7 +109,6 @@ XEngine.Sprite.prototypeExtends = {
 			];
 
 			this._setUVs(uv);
-			//this._setVertices();
 		}
 
 		XEngine.BaseObject.prototype._renderToCanvas.call(this, context);
