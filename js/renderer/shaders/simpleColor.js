@@ -2,21 +2,19 @@ XEngine.ShaderLib = {}
 
 XEngine.ShaderLib.SimpleColor = {
 	vertexShader:[
+		'#version 300 es',
 		"#XBaseParams",
-		"varying lowp vec4 vColor;",
 	  
-		"void main(void) {",
-		  "gl_Position = pMatrix * mvMatrix * vec4(aVertexPosition, 1.0);",
-		  "vec2 uv = vUv;",
-		  "vColor = aVertexColor;",
+		"void mainPass() {",
 		"}"
 	],
 	fragmentShader:[
+		'#version 300 es',
 		"precision mediump float;",
-		"varying lowp vec4 vColor;",
+		"#XBaseParams",
 
 		"void main(void) {",
-			"gl_FragColor = vColor;",
+			"fragColor = vColor;",
 		"}"
 	],
 

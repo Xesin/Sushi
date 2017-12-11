@@ -15,7 +15,9 @@ XEngine.Renderer = function (game, canvas) {
 	};
 	try {
 		// Tratar de tomar el contexto estandar. Si falla, probar otros.
-		this.context = canvas.getContext("webgl", {stencil:true}) || canvas.getContext("experimental-webgl") || canvas.getContext("moz-webgl") || canvas.getContext("webkit-3d");
+		var options = {stencil:true, antialias:false};
+		this.context = canvas.getContext("webgl2", options);
+		console.log(this.context.getContextAttributes());
 	}
 	catch(e) {}
 	
@@ -50,7 +52,7 @@ XEngine.Renderer.prototype = {
 		//this.context.clearRect(0, 0, this.game.width * this.scale.x, this.game.height * this.scale.y); //Limpiamos el canvas
 		//this.context.save();
 		//this.context.scale(this.scale.x, this.scale.y);
-		this.renderLoop(this.game.gameObjects);
+		this.renderLoop(this.game.renderQueue);
 		//this.context.restore();
 	},
 

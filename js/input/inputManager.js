@@ -178,6 +178,8 @@ XEngine.InputManager.prototype = {
 						}
 						gameObject.onInputDown.dispatch(event);
 						gameObject.isInputDown = true;
+						gameObject.downPos.setTo(inputPos.position.x, inputPos.position.y);
+						gameObject.posWhenDown.setTo(gameObject.position.x, gameObject.position.y)
 						return true;
 					}
 				}
@@ -185,7 +187,7 @@ XEngine.InputManager.prototype = {
 			return false;
 		};
 
-		loop(this.game.gameObjects);
+		loop(this.game.updateQueue);
 	},
 
 	/**
@@ -225,13 +227,16 @@ XEngine.InputManager.prototype = {
 						gameObject.onInputLeft.dispatch(event);
 						gameObject.isInputOver = false;
 					}
+					if(gameObject.pickeable && gameObject.isInputDown){
+						gameObject.position.setTo(gameObject.posWhenDown.x - (gameObject.downPos.x - inputPos.position.x), gameObject.posWhenDown.y - (gameObject.downPos.y - inputPos.position.y))
+					}
 				}
 
 			}
 		};
 
 		this.onInputMove.dispatch(inputPos);
-		loop(this.game.gameObjects);
+		loop(this.game.updateQueue);
 	},
 
 	/**
@@ -306,7 +311,7 @@ XEngine.InputManager.prototype = {
 			}
 		};
 
-		loop(this.game.gameObjects);
+		loop(this.game.updateQueue);
 	},
 
 	/**
@@ -339,7 +344,7 @@ XEngine.InputManager.prototype = {
 			}
 			return false;
 		};
-		loop(this.game.gameObjects);
+		loop(this.game.updateQueue);
 	},
 
 	/**
