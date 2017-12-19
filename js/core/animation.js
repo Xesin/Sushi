@@ -41,6 +41,7 @@ XEngine.Animation.prototype = {
 				}
 			}
 		}
+		console.log(_this.currentFrame);
 		_this.sprite.frame = _this.frames[_this.currentFrame];
 	},
 

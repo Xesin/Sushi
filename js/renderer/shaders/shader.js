@@ -1,8 +1,4 @@
 XEngine.ShaderUniforms ={
-	mvMatrix:{ 
-		value: null,
-		type: XEngine.Uniforms.MAT4X4
-	},
 	pMatrix:{
 		value: null,
 		type: XEngine.Uniforms.MAT4X4
@@ -79,10 +75,8 @@ XEngine.Shader.prototype = {
 		this.vertPostAtt = gl.getAttribLocation(this.shaderProgram, "aVertexPosition");
 		this.vertColAtt = gl.getAttribLocation(this.shaderProgram, "aVertexColor");
 		this.vertUvAtt = gl.getAttribLocation(this.shaderProgram, "vUv");
+		this.vertAlphaAtt = gl.getAttribLocation(this.shaderProgram, "in_alpha");
 		
-		gl.enableVertexAttribArray(this.vertPostAtt);
-		gl.enableVertexAttribArray(this.vertColAtt);
-		gl.enableVertexAttribArray(this.vertUvAtt);
 		for (var property in this.uniforms) {
 			if (this.uniforms.hasOwnProperty(property)) {
 				this.uniforms[property].gpuPosition = gl.getUniformLocation(this.shaderProgram, property);
@@ -96,7 +90,16 @@ XEngine.Shader.prototype = {
 		}
 	},
 
+	getAttribLocation:function(gl, attr){
+		return gl.getAttribLocation(this.shaderProgram, attr);
+	},
+
 	_beginRender: function(gl){
+		if(!this.compiled) this.initializeShader(gl);
+		gl.useProgram(this.shaderProgram);
+	},
+
+	bind: function(gl){
 		if(!this.compiled) this.initializeShader(gl);
 		gl.useProgram(this.shaderProgram);
 	},

@@ -35,8 +35,13 @@ XEngine.Renderer = function (game, canvas) {
 		this.context.blendFunc(this.context.ONE, this.context.ONE_MINUS_SRC_ALPHA);
 		this.context.disable(this.context.DEPTH_TEST);
 		this.context.enable(this.context.BLEND);
+		this.context.enable(this.context.CULL_FACE);
 		this.context.viewport(0, 0, this.game.canvas.width, this.game.canvas.height);
 		console.log(this.context);
+		this.resourceManager = new XEngine.ResourceManager(this.context);
+		this.spriteBatch = new XEngine.SpriteBatch(this.game, this.context, this);
+		this.renderer = null;
+		this.sprite = undefined;
 	}
 };
 
@@ -53,7 +58,25 @@ XEngine.Renderer.prototype = {
 		//this.context.save();
 		//this.context.scale(this.scale.x, this.scale.y);
 		this.renderLoop(this.game.renderQueue);
+		if(this.renderer){
+			this.renderer.flush();
+			this.renderer = null;
+			this.sprite = null;
+		}
 		//this.context.restore();
+	},
+
+	setRenderer: function(renderer, sprite){
+		if(this.renderer !== renderer || this.sprite !== sprite){
+			if(this.renderer){
+				this.renderer.flush();
+			}
+		}
+		if(renderer.shouldFlush()){
+			renderer.flush();
+		}
+		this.renderer = renderer;
+		this.sprite = sprite;
 	},
 
 	setClearColor: function(r, g, b, a){
@@ -73,7 +96,7 @@ XEngine.Renderer.prototype = {
 	renderLoop: function (arrayObjects) { //Renderizamos el array de objetos que le pasamos por parametro
 		var _this = this;
 		for (var i = 0; i < arrayObjects.length; i++) {
-			var object = arrayObjects[i];
+			let object = arrayObjects[i];
 			if (!object.render) continue;
 			if (XEngine.Group.prototype.isPrototypeOf(object)) { //Si es un grupo, llamamos al render pasando los objetos que contiene
 				object._beginRender(_this.context);

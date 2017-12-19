@@ -149,6 +149,7 @@ Gameplay.prototype = {
 					}
 				}
 				var sprite = new Block(this.game, this, i, j, type);
+				sprite.mask = this.mask;
 				if (clockLevel && !generatedClock && randomCoord.x == i && randomCoord.y == j) {
 					generatedClock = true;
 					sprite.setAsTimeBlock();
@@ -238,7 +239,7 @@ Gameplay.prototype = {
 		for(var i =0; i <= 3; i++){
 			frames[i] = 'Explosion/Explosion_'+i;
 		}
-		explosion.animation.add('explode', frames, 100, false);
+		explosion.animation.add('explode', frames, 60, false);
 		explosion.animation.play('explode').onComplete.addOnce(function () {
 			this.destroy();
 		}, explosion);

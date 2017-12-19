@@ -17,7 +17,8 @@ XEngine.ShaderLib.Sprite = {
 			"texCol.rgb *= texCol.w;",
 			//"if(texCol.a >= 0.8){",
 			"if(texCol.a <= 0.05) discard;",
-			"fragColor = texCol*vColor;",
+			"texCol.xyz *= vColor;",
+			"fragColor = texCol*alpha;",
 			//"}else{",
 			//	"gl_FragColor = vec4(uv.x, uv.y, 0.0, 1.0);",
 			//"}",
@@ -36,6 +37,10 @@ XEngine.SpriteShader.constructor = XEngine.SpriteShader;
 XEngine.SpriteShader.prototypeExtends = {
 	_setTexture: function(texture){
 		this.texture = texture;
+	},
+
+	bind:function(gl){
+		XEngine.Shader.prototype.bind.call(this, gl);
 	},
 
 	_beginRender: function(gl){

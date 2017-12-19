@@ -9,6 +9,7 @@
 XEngine.BaseObject = function (game) { //De este objeto parten todos los objetos que se pueden poner en el juego
 	var _this = this;
 	_this.game = game; //Referencia al juego
+	_this.parent = game;
 	/**
 	 * @property {Boolean} isPendingDestroy - determina si el objeto va a ser destruido en el siguiente frame
 	 * @readonly
@@ -99,6 +100,7 @@ XEngine.BaseObject = function (game) { //De este objeto parten todos los objetos
 	_this.height = 0;
 	_this._prevWidth = 0;
 	_this._prevHeight = 0;
+	_this._prevPos = {x: 0, y: 0}
 	_this.shader = null;
 
 	_this._vertDataBuffer = new XEngine.DataBuffer(24 * 4);
@@ -110,10 +112,25 @@ XEngine.BaseObject = function (game) { //De este objeto parten todos los objetos
 		1.0, 1.0,
 	];
 
-	_this._uvDataBuffer = new XEngine.DataBuffer(8 * 4);
+	var gl = this.game.context;
 
-	_this.vertexBuffer = game.context.createBuffer();
-	_this.uvBuffer = game.context.createBuffer();
+	var indexDataBuffer = new XEngine.DataBuffer16(2 * 6);
+	_this.vertexBuffer = this.game.renderer.resourceManager.createBuffer(gl.ARRAY_BUFFER, _this._vertDataBuffer.getByteCapacity(), gl.STREAM_DRAW);
+	_this.indexBuffer = this.game.renderer.resourceManager.createBuffer(gl.ELEMENT_ARRAY_BUFFER, _this._vertDataBuffer.getByteCapacity(), gl.STATIC_DRAW);
+	var indexBuffer = indexDataBuffer.uintView;
+	for (var indexA = 0, indexB = 0; indexA < 6; indexA += 6, indexB += 4)
+	{
+		indexBuffer[indexA + 0] = indexB + 0;
+		indexBuffer[indexA + 1] = indexB + 1;
+		indexBuffer[indexA + 2] = indexB + 2;
+		indexBuffer[indexA + 3] = indexB + 1;
+		indexBuffer[indexA + 4] = indexB + 3;
+		indexBuffer[indexA + 5] = indexB + 2;
+	}
+
+	_this.indexBuffer.updateResource(indexBuffer, 0);
+
+	_this.uvBuffer =new XEngine.VertexBuffer(game.context, game.context.createBuffer());
 
 	_this.mask = null;
 
@@ -124,7 +141,7 @@ XEngine.BaseObject = function (game) { //De este objeto parten todos los objetos
 	_this.pickeable = false;
 	_this.downPos = new XEngine.Vector(0,0);
 	_this.posWhenDown = new XEngine.Vector(0,0);
-	_this.color = [1.0,1.0,1.0,1.0];
+	_this.color = [(0xffffff >> 16) + (0xffffff & 0xff00) + ((0xffffff & 0xff) << 16)];
 };
 
 XEngine.BaseObject.prototype = {
@@ -153,71 +170,66 @@ XEngine.BaseObject.prototype = {
 	},
 
 	_setBuffers: function(){
-		this.game.context.useProgram(this.shader.shaderProgram);
-		this.vertexBuffer.itemSize = 3 + 4;
-		this.vertexBuffer.numItems = 4;
-		this._setVertices(this.width, this.height, this.color);
-		this._setUVs(this._uv);
-		this.uvBuffer.itemSize = 2;
-		this.uvBuffer.numItems = 4;
+		var context = this.game.context;
+		context.useProgram(this.shader.shaderProgram);
+		this.vertexBuffer.addAttribute(this.shader.vertPostAtt, 2, context.FLOAT, false, 24, 0);
+		this.vertexBuffer.addAttribute(this.shader.vertUvAtt, 2, context.FLOAT, false, 24, 8);
+		this.vertexBuffer.addAttribute(this.shader.vertColAtt, 3, context.UNSIGNED_BYTE, true, 24, 16);
+		this.vertexBuffer.addAttribute(this.shader.vertAlphaAtt, 1, context.FLOAT, false, 24, 20);
 	},
 
-	setColor: function(r,g,b,a = 1.0){
-		this.color[0] = r;
-		this.color[1] = g;
-		this.color[2] = b;
-		this.color[3] = a;
-		this._setVertices(this.width, this.height, this.color);
+	setColor: function(value, a = 1.0){
+		this.color = value;
+		this.alpha = a;
+		this._setVertices(this.width, this.height, this.color, this._uv);
 	},
 
-	_setVertices: function(width, height, color){
+	_setVertices: function(width, height, color, uv){
 		var floatBuffer = this._vertDataBuffer.floatView;
+		var uintBuffer = this._vertDataBuffer.uintView;
 		var index = 0;
-		floatBuffer[index++] = 0.0;
-		floatBuffer[index++] = 0.0;
-		floatBuffer[index++] = color[0];
-		floatBuffer[index++] = color[1];
-		floatBuffer[index++] = color[2];
-		floatBuffer[index++] = color[3];
+		var pos = new XEngine.Vector(0, 0);
+		this.getWorldMatrix(this.mvMatrix);
+		pos = pos.multiplyMatrix(this.mvMatrix);		
+		
+		floatBuffer[index++] = pos.x;
+		floatBuffer[index++] = pos.y;
+		floatBuffer[index++] = uv[0];
+		floatBuffer[index++] = uv[1];
+		uintBuffer[index++] = color;
+		floatBuffer[index++] = this.alpha;
 
-		floatBuffer[index++] = 0.0;
-		floatBuffer[index++] = height;
-		floatBuffer[index++] = color[0];
-		floatBuffer[index++] = color[1];
-		floatBuffer[index++] = color[2];
-		floatBuffer[index++] = color[3];
+		pos.setTo(0, this.height);
+		pos = pos.multiplyMatrix(this.mvMatrix);
 
-		floatBuffer[index++] = width;
-		floatBuffer[index++] = 0.0;
-		floatBuffer[index++] = color[0];
-		floatBuffer[index++] = color[1];
-		floatBuffer[index++] = color[2];
-		floatBuffer[index++] = color[3];
+		floatBuffer[index++] = pos.x;
+		floatBuffer[index++] = pos.y;
+		floatBuffer[index++] = uv[2];
+		floatBuffer[index++] = uv[3];
+		uintBuffer[index++] = color;
+		floatBuffer[index++] = this.alpha;
 
-		floatBuffer[index++] =width;
-		floatBuffer[index++] = height;
-		floatBuffer[index++] = color[0];
-		floatBuffer[index++] = color[1];
-		floatBuffer[index++] = color[2];
-		floatBuffer[index++] = color[3];
+		pos.setTo(this.width, 0);
+		pos = pos.multiplyMatrix(this.mvMatrix);
 
-		this.game.context.bindBuffer(this.game.context.ARRAY_BUFFER, this.vertexBuffer);
-		this.game.context.bufferData(this.game.context.ARRAY_BUFFER, floatBuffer, this.game.context.STATIC_DRAW);
-	},
+		floatBuffer[index++] = pos.x;
+		floatBuffer[index++] = pos.y;
+		floatBuffer[index++] = uv[4];
+		floatBuffer[index++] = uv[5];
+		uintBuffer[index++] = color;
+		floatBuffer[index++] = this.alpha;
 
-	_setUVs: function(uvs){
-		this._uv = uvs;
-		var floatBuffer = this._uvDataBuffer.floatView;
-		floatBuffer[0] = uvs[0];
-		floatBuffer[1] = uvs[1];
-		floatBuffer[2] = uvs[2];
-		floatBuffer[3] = uvs[3];
-		floatBuffer[4] = uvs[4];
-		floatBuffer[5] = uvs[5];
-		floatBuffer[6] = uvs[6];
-		floatBuffer[7] = uvs[7];
-		this.game.context.bindBuffer(this.game.context.ARRAY_BUFFER, this.uvBuffer);
-		this.game.context.bufferData(this.game.context.ARRAY_BUFFER, floatBuffer, this.game.context.STATIC_DRAW);
+		pos.setTo(this.width, this.height);
+		pos = pos.multiplyMatrix(this.mvMatrix);
+
+		floatBuffer[index++] = pos.x;
+		floatBuffer[index++] = pos.y;
+		floatBuffer[index++] = uv[6];
+		floatBuffer[index++] = uv[7];
+		uintBuffer[index++] = color;
+		floatBuffer[index++] = this.alpha;
+
+		this.vertexBuffer.updateResource(floatBuffer, 0);
 	},
 
 	/**
@@ -264,7 +276,7 @@ XEngine.BaseObject.prototype = {
 		mat4.translate(childMatrix, childMatrix, translation);
 		mat4.rotateZ(childMatrix, childMatrix, this.rotation * XEngine.Mathf.TO_RADIANS);
 		mat4.scale(childMatrix, childMatrix, [this.scale.x, this.scale.y, 1.0]);
-		//mat4.translate(childMatrix, childMatrix, [posX, posY, 0.0]);
+		mat4.translate(childMatrix, childMatrix, [posX, posY, 0.0]);
 		return childMatrix;
 	},
 
@@ -280,33 +292,12 @@ XEngine.BaseObject.prototype = {
 		var parentPos = _this.parent.getWorldPos();
 		var x = _this.position.x + parentPos.x;
 		var y = _this.position.y + parentPos.y;
-		return {
-			x: x,
-			y: y
-		};
+		return new XEngine.Vector(x, y);
 	},
 
 	_beginRender:function(context){
 		if(this.shader)
 			this.shader._beginRender(context);
-		if(this.mask != null){
-			// disable color (u can also disable here the depth buffers)
-			context.colorMask(false, false, false, false);
-		
-			// Replacing the values at the stencil buffer to 1 on every pixel we draw
-			context.stencilFunc(context.ALWAYS, 1, 1);
-			context.stencilOp(context.REPLACE, context.REPLACE, context.REPLACE);
-		
-			context.enable(context.STENCIL_TEST);
-		
-			this.mask._renderToCanvas(context);
-		
-			// Telling the stencil now to draw/keep only pixels that equals 1 - which we set earlier
-			context.stencilFunc(context.EQUAL, 1, 1);
-			context.stencilOp(context.ZERO, context.ZERO, context.ZERO);
-			// enabling back the color buffer
-			context.colorMask(true, true, true, true);
-		}
 	},
 
 	/**
@@ -317,33 +308,64 @@ XEngine.BaseObject.prototype = {
 	 * @private
 	 */
 	_renderToCanvas: function (context) { //Como cada objeto se renderiza distinto, en cada uno se implementa este método según la necesidad
-		this.getWorldMatrix(this.mvMatrix);
-		this.shader.baseUniforms.mvMatrix.value = this.mvMatrix;
 		this.shader.baseUniforms.pMatrix.value = this.game.camera.pMatrix;
 		this.shader.updateUniforms(context);
 
-		if(this.width !== this._prevWidth || this.height !== this._prevHeight){
-			this._prevWidth = this.width;
+		if(this._prevHeight != this.height || this._prevWidth != this.width || this._prevPos.x != this.position.x || this._prevPos.y != this.position.y){
+			this._setVertices(this.width, this.height, this.color, this._uv);
 			this._prevHeight = this.height;
-			this._setVertices(this.width, this.height, this.color);
+			this._prevWidth = this.width;
+			this._prevPos.x = this.position.x;
+			this._prevPos.y = this.position.y;
 		}
+		
+		
+		this.vertexBuffer.bind();
+		this.indexBuffer.bind();
 
-		context.bindBuffer(context.ARRAY_BUFFER, this.vertexBuffer);
-
-		context.vertexAttribPointer(this.shader.vertPostAtt, 3, context.FLOAT, false, 24, 0);		
-		context.vertexAttribPointer(this.shader.vertColAtt, 4, context.FLOAT, false, 24, 8);
-
-		context.bindBuffer(context.ARRAY_BUFFER, this.uvBuffer);
-
-		context.vertexAttribPointer(this.shader.vertUvAtt, this.uvBuffer.itemSize, context.FLOAT, false, 0, 0);
-
-		context.drawArrays(context.TRIANGLE_STRIP, 0, this.vertexBuffer.numItems);
+		context.drawElements(context.TRIANGLES, 6, context.UNSIGNED_SHORT, 0);
 	},
 
-	_endRender(context){
+	rendermask:function(gl){
+		// disable color (u can also disable here the depth buffers)
+		gl.colorMask(false, false, false, false);
+		
+		// Replacing the values at the stencil buffer to 1 on every pixel we draw
+		gl.stencilFunc(gl.ALWAYS, 1, 1);
+		gl.stencilOp(gl.REPLACE, gl.REPLACE, gl.REPLACE);
+	
+		gl.enable(gl.STENCIL_TEST);
+		if(this.sprite){
+			var cache_image = this.game.cache.image(this.sprite); //Obtenemos la imagen a renderizar
+			this.shader._setTexture(cache_image._texture);
+		}		
+		this.shader._beginRender(gl);
+		
+		this.shader.baseUniforms.pMatrix.value = this.game.camera.pMatrix;
+		this.shader.updateUniforms(gl);
+		
+		this._setVertices(this.width, this.height, this.color, this._uv);		
+		
+		this.vertexBuffer.bind();
+		this.indexBuffer.bind();
+		
+		gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+		// enabling back the color buffer
+		// Telling the stencil now to draw/keep only pixels that equals 1 - which we set earlier
+		gl.stencilFunc(gl.EQUAL, 1, 1);
+		gl.stencilOp(gl.ZERO, gl.ZERO, gl.ZERO);
+		gl.colorMask(true, true, true, true);
+		
+	},
+
+	endRendermask:function(gl){
+		gl.disable(gl.STENCIL_TEST);
+		gl.clear(gl.STENCIL_BUFFER_BIT);
+	},
+
+	_endRender:function(context){
 		if(this.mask != null){
-			context.disable(context.STENCIL_TEST);
-			context.clear(context.STENCIL_BUFFER_BIT);
+			
 		}
 	},
 
