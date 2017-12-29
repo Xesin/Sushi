@@ -13,7 +13,7 @@ ConfirmationDialog.prototypeExtends = {
 		this.game.tween.add(this.scale).to({
 			x: 1,
 			y: 1
-		}, 300, XEngine.Easing.BackOut, true);
+		}, 300, XEngine.Easing.Back.Out, true);
 		var panel = this.game.add.sprite(0, 0, App.MENU_ITEMS_KEY, 'ConfirmationWindow');
 		panel.anchor.setTo(0.5);
 		var questionText = this.game.add.text(panel.position.x, panel.position.y - 60, message,{font_size: 32});
@@ -35,7 +35,7 @@ ConfirmationDialog.prototypeExtends = {
 		this.game.tween.add(this.scale).to({
 			x: 0,
 			y: 0
-		}, 300, XEngine.Easing.BackIn, true).onComplete.add(function () {
+		}, 300, XEngine.Easing.Back.In, true).onComplete.add(function () {
 			this.invisibleBackground.destroy();
 			if (this.onConfirm) {
 				this.onConfirm.call(this.context);
@@ -49,7 +49,7 @@ ConfirmationDialog.prototypeExtends = {
 		this.game.add.tween(this.scale).to({
 			x: 0,
 			y: 0
-		}, 300, XEngine.Easing.BackIn, true).onComplete.add(function () {
+		}, 300, XEngine.Easing.Back.In, true).onComplete.add(function () {
 			this.invisibleBackground.destroy();
 			if (this.onCancel) {
 				this.onCancel.call(this.context);

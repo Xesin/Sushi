@@ -79,7 +79,7 @@ Gameplay.prototype = {
 		this.uiGroup.add(pauseButton);
 		this.game.tween.add(this.uiGroup.position).to({
 			y: 0
-		}, 500, XEngine.Easing.ExpoOut, true);
+		}, 500, XEngine.Easing.Expo.Out, true);
 		this.timeCropRect = this.game.add.rect(this.timeBar.position.x, this.timeBar.position.y, this.timeBar.width, this.timeBar.height);
 		this.timeCropRect.anchor.setTo(0, 0.5);
 		this.timeBar.mask = this.timeCropRect;
@@ -201,7 +201,7 @@ Gameplay.prototype = {
 			var tween = this.game.tween.add(cells[i].scale).to({
 				x: 0,
 				y: 0
-			}, 200, XEngine.Easing.BackIn, true);
+			}, 200, XEngine.Easing.Back.In, true);
 			
 			tween.onComplete.add(function () {
 				this.kill();

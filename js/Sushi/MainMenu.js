@@ -60,23 +60,23 @@ MainMenu.prototype = {
 		this.logoGroup.add(sushiBlue);
 		// this.game.tween.add(this.logoGroup).to({
 		// 	alpha: 1
-		// }, 300, XEngine.Easing.ExpoIn, true, 300);
-		this.game.tween.add(sushiRed.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.ExpoIn, true);
-		this.game.tween.add(sushiGreen.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.ExpoIn, true);
-		this.game.tween.add(sushiPurple.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.ExpoIn, true);
-		this.game.tween.add(sushiYellow.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.ExpoIn, true);
-		this.game.tween.add(sushiBlue.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.ExpoIn, true);
-		this.game.tween.add(logo.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.ExpoIn, true);
-		this.game.tween.add(sushiRed).to({ rotation: 17 }, 1500, XEngine.Easing.ExpoOut, true);
-		this.game.tween.add(sushiGreen).to({ rotation: -19 }, 1500, XEngine.Easing.ExpoOut, true);
-		this.game.tween.add(sushiPurple).to({ rotation: -25 }, 1500, XEngine.Easing.ExpoOut, true);
-		this.game.tween.add(sushiYellow).to({ rotation: 15 }, 1500, XEngine.Easing.ExpoOut, true);
-		this.game.tween.add(sushiBlue).to({ rotation: -18 }, 1500, XEngine.Easing.ExpoOut, true);
-		this.game.tween.add(sushiRed.position).to({ x: '-220', y: '-50' }, 600, XEngine.Easing.ExpoIn, true);
-		this.game.tween.add(sushiGreen.position).to({ x: '-220', y: '+140' }, 600, XEngine.Easing.ExpoIn, true);
-		this.game.tween.add(sushiPurple.position).to({ x: '-30', y: '+250' }, 600, XEngine.Easing.ExpoIn, true);
-		this.game.tween.add(sushiYellow.position).to({ x: '+180', y: '+220' }, 600, XEngine.Easing.ExpoIn, true);
-		this.game.tween.add(sushiBlue.position).to({ x: '+250', y: '+30' }, 600, XEngine.Easing.ExpoIn, true);
+		// }, 300, XEngine.Easing.Expo.In, true, 300);
+		this.game.tween.add(sushiRed.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.Expo.In, true);
+		this.game.tween.add(sushiGreen.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.Expo.In, true);
+		this.game.tween.add(sushiPurple.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.Expo.In, true);
+		this.game.tween.add(sushiYellow.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.Expo.In, true);
+		this.game.tween.add(sushiBlue.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.Expo.In, true);
+		this.game.tween.add(logo.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.Expo.In, true);
+		this.game.tween.add(sushiRed).to({ rotation: 17 }, 1500, XEngine.Easing.Expo.Out, true);
+		this.game.tween.add(sushiGreen).to({ rotation: -19 }, 1500, XEngine.Easing.Expo.Out, true);
+		this.game.tween.add(sushiPurple).to({ rotation: -25 }, 1500, XEngine.Easing.Expo.Out, true);
+		this.game.tween.add(sushiYellow).to({ rotation: 15 }, 1500, XEngine.Easing.Expo.Out, true);
+		this.game.tween.add(sushiBlue).to({ rotation: -18 }, 1500, XEngine.Easing.Expo.Out, true);
+		this.game.tween.add(sushiRed.position).to({ x: '-220', y: '-50' }, 600, XEngine.Easing.Expo.In, true);
+		this.game.tween.add(sushiGreen.position).to({ x: '-220', y: '+140' }, 600, XEngine.Easing.Expo.In, true);
+		this.game.tween.add(sushiPurple.position).to({ x: '-30', y: '+250' }, 600, XEngine.Easing.Expo.In, true);
+		this.game.tween.add(sushiYellow.position).to({ x: '+180', y: '+220' }, 600, XEngine.Easing.Expo.In, true);
+		this.game.tween.add(sushiBlue.position).to({ x: '+250', y: '+30' }, 600, XEngine.Easing.Expo.In, true);
 	},
 
 	createButtons:function(){
@@ -94,29 +94,29 @@ MainMenu.prototype = {
 		playButton.onClick.addOnce(this.playPressed, this);
 		this.game.tween.add(playButton).to({
 			alpha: 1
-		}, 300, XEngine.Easing.ExpoIn, true, 300);
+		}, 300, XEngine.Easing.Expo.In, true, 300);
 		this.game.tween.add(playButton.scale).to({
 			x: 1,
 			y: 1
-		}, 400, XEngine.Easing.BackOut, true, 300);
+		}, 400, XEngine.Easing.Back.Out, true, 300);
 		optionsButton.alpha = 0;
 		optionsButton.scale.setTo(0);
 		this.game.tween.add(optionsButton).to({
 			alpha: 1
-		}, 300, XEngine.Easing.ExpoIn, true, 300);
+		}, 300, XEngine.Easing.Expo.In, true, 300);
 		this.game.tween.add(optionsButton.scale).to({
 			x: 1,
 			y: 1
-		}, 400, XEngine.Easing.BackOut, true, 300);
+		}, 400, XEngine.Easing.Back.Out, true, 300);
 		languageButton.alpha = 0;
 		languageButton.scale.setTo(0);
 		this.game.tween.add(languageButton).to({
 			alpha: 1
-		}, 300, XEngine.Easing.ExpoIn, true, 300);
+		}, 300, XEngine.Easing.Expo.In, true, 300);
 		this.game.tween.add(languageButton.scale).to({
 			x: 1,
 			y: 1
-		}, 400, XEngine.Easing.BackOut, true, 300);
+		}, 400, XEngine.Easing.Back.Out, true, 300);
 	},
 
 	playPressed:function(){
@@ -124,7 +124,7 @@ MainMenu.prototype = {
 		this.game.tween.add(this.logoGroup.scale).to({
 			x: 0,
 			y: 0
-		}, 400, XEngine.Easing.BackIn, true).onComplete.addOnce(function () {
+		}, 400, XEngine.Easing.Back.In, true).onComplete.addOnce(function () {
 			this.game.state.start('Gameplay');
 		}, this);
 		var mainButtons = this.mainGroup.children;
@@ -132,7 +132,7 @@ MainMenu.prototype = {
 			this.game.tween.add(mainButtons[i].scale).to({
 				x: 0,
 				y: 0
-			}, 300, XEngine.Easing.BackIn, true);
+			}, 300, XEngine.Easing.Back.In, true);
 		}
 	}
 }

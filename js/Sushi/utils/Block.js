@@ -109,7 +109,7 @@ Block.prototypeExtends = {
 		this.moveTween = this.game.tween.add(this.position).to({
 			x: this.indexX * App.TILE_SIZE,
 			y: this.indexY * App.TILE_SIZE
-		}, 500, XEngine.Easing.ExpoInOut, true, delay);
+		}, 500, XEngine.Easing.Expo.InOut, true, delay);
 		return this.moveTween;
 	},
 
@@ -135,7 +135,7 @@ Block.prototypeExtends = {
 		this.rotation = -8;
 		this.hintTween = this.game.add.tween(this).to({
 			rotation: 8
-		}, 150, XEngine.Easing.Linear, true, 0, 1, true);
+		}, 150, XEngine.Easing.Linear.None, true, 0, 1, true);
 		this.hintTween.onComplete.add(function () {
 			this.angle = 0;
 			//this.waitForNextShake();
@@ -153,13 +153,13 @@ Block.prototypeExtends = {
 	moveBlockDown:function(){
 		this.game.tween.add(this.position).to({
 			y: this.indexY * App.TILE_SIZE
-		}, 100, XEngine.Easing.ExpoOut, true);
+		}, 100, XEngine.Easing.Expo.Out, true);
 	},
 
 	moveBlockSide:function(){
 		this.game.tween.add(this.position).to({
 			x: this.indexX * App.TILE_SIZE
-		}, 100, XEngine.Easing.ExpoOut, true);
+		}, 100, XEngine.Easing.Expo.Out, true);
 	}
 }
 
