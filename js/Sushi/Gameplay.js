@@ -33,8 +33,9 @@ Gameplay.prototype = {
 		this.initializeArray();
 		this.score = 0;
 		this.gameTimeRemaining = App.TIME_PER_GAME_SECONDS * 1000;
-		//this.hintTimer = this.time.create(false);
-		//this.brightTimer = this.time.create(false);
+		this.hintTimer = this.game.time.addTimer(App.HINT_TIME_MS);
+		this.hintTimer.onCompleted.add(this.showHint, this);
+		//this.brightTimer = this.time.create(100);
 		this.currentBonus = 1;
 		this.timeToLostBonus = 0;
 		this.startCountDown();
@@ -50,7 +51,8 @@ Gameplay.prototype = {
 		var scoreBox = this.game.add.sprite(205, 70, App.GAMEPLAY_KEY, 'Score_Box');
 		scoreBox.anchor.setTo(0.5);
 		this.uiGroup.add(scoreBox);
-		this.scoreText = this.game.add.text(scoreBox.position.x, scoreBox.position.y,  '0',{font_size: 38});
+		this.scoreText = this.game.add.bitmapText(scoreBox.position.x, scoreBox.position.y, App.DIGITS_WHITE_FONT, '0');
+		this.scoreText.scale.setTo(0.7);
 		this.scoreText.anchor.setTo(0.5);
 		this.uiGroup.add(this.scoreText);
 		var comboBox = this.game.add.sprite(this.game.width / 2 + 80, scoreBox.position.y, App.GAMEPLAY_KEY, 'Combo_Box');
@@ -123,7 +125,7 @@ Gameplay.prototype = {
 	},
 
 	fillWithBlocks: function(){
-		var clockLevel = XEngine.Mathf.randomRange(0, 100) > 70;
+		var clockLevel = XEngine.Mathf.randomRange(0, 100) > 1;
 		var generatedClock = false;
 		var randomCoord = null;
 		if (clockLevel) {
@@ -186,13 +188,14 @@ Gameplay.prototype = {
 				this.blocksArray[i][j].enableInput();
 			}
 		}
-		// this.startHintTimer();
+		this.startHintTimer();
 		// this.startBrighTimer();
 		this.currentState = Sushi.State.PLAYING;
 	},
 
 	removeCells:function(coords, colorFont){
 		this.timeToLostBonus += 700;
+		
 		this.blocksGroup.callAll('removeHint', null);
 		var cells = this.getAllConnected(coords);
 		var puntuation = 0;
@@ -228,6 +231,36 @@ Gameplay.prototype = {
 		}
 		this.increaseScore(puntuation * this.currentBonus);
 		//this.showCollectedScore(puntuation, colorFont);
+	},
+
+	update: function(deltaTime){
+		if(this.currentState === Sushi.State.PLAYING) {
+			this.gameTimeRemaining -= this.game.time.deltaTimeMillis;
+			this.timeToLostBonus -= this.game.time.deltaTimeMillis * 0.5; //half of the speed
+			this.timeToLostBonus = XEngine.Mathf.clamp(this.timeToLostBonus, 0, App.TIME_TO_LOSE_BONUS_MS);
+			this.timeCropRect.width = XEngine.Mathf.lerp(0, this.cropWidth, this.gameTimeRemaining / (App.TIME_PER_GAME_SECONDS * 1000));
+
+			this.comboCropRect.height = XEngine.Mathf.lerp(0, this.cropHeight, this.timeToLostBonus / App.TIME_TO_LOSE_BONUS_MS);
+
+			if (this.gameTimeRemaining <= 0) {
+				this.currentState = Sushi.State.SHOWING_SCORE;
+				//this.onTimeOut();
+			}
+			else if (this.gameTimeRemaining <= 10000 && !this.hurryUp) {
+				//this.enterHurryUp();
+			}
+			if (this.timeToLostBonus <= 0) {
+				this.resetBonus();
+			}
+			else if (this.timeToLostBonus >= App.TIME_TO_LOSE_BONUS_MS && this.currentBonus < App.MAX_BONUS) {
+				this.timeToLostBonus = 1000;
+				this.currentBonus++;
+				this.comboImage.frame = 'x'.concat(this.currentBonus.toString());
+			}
+
+			//console.log(XEngine.Mathf.lerp(0, this.cropHeight, this.timeToLostBonus / App.TIME_TO_LOSE_BONUS_MS));
+			//this.comboCropRect.height = 200;
+		}
 	},
 
 	spawnExplosion:function(coords){
@@ -301,6 +334,44 @@ Gameplay.prototype = {
 		this.fillEmptyColumns();
 	},
 
+	startHintTimer: function () {
+		this.hintTimer.start();
+	},
+
+	resetHintTimer: function () {
+		this.hintTimer.stop();
+		this.hintTimer.start();
+	},
+
+	stopHintTimer: function () {
+		this.hintTimer.stop();
+	},
+
+	showHint: function () {
+		var posibleCombinations = [];
+		for (var i = 0; i < App.GAME_W; i++) {
+			for (var j = 0; j < App.GAME_H; j++) {
+				var coords = {
+					x: i,
+					y: j
+				};
+				if (this.blocksArray[i][j] && this.blocksArray[i][j].checkConnected(coords)) {
+					var cellsConnected = this.getAllConnected(coords);
+					for (var k = 0; k < cellsConnected.length; k++) {
+						cellsConnected[k].activated = true;
+					}
+					if (cellsConnected.length > 0) {
+						posibleCombinations.push(cellsConnected);
+					}
+				}
+			}
+		}
+		var selectedCombination = posibleCombinations[XEngine.Mathf.randomIntRange(0, posibleCombinations.length - 1)];
+		for (var i = 0; i < selectedCombination.length; i++) {
+			selectedCombination[i].setupHint();
+		}
+	},
+
 	fillEmptyColumns:function(){
 		for (var i = 1; i <= (App.GAME_W / 2) - 1; i++) {
 			var emptyColumn = true;
@@ -324,21 +395,58 @@ Gameplay.prototype = {
 				this.moveLeft(i);
 			}
 		}
-		// if (this.checkEndGame()) {
-		// 	if (this.currentState == Sushi.State.PLAYING) {
-		// 		this.currentState = Sushi.State.PREPARING;
-		// 		var playerCompletePanel = this.playerCompletesPanel();
-		// 		this.stopHintTimer();
-		// 		this.stopBrighTimer();
-		// 		this.clearRemainingBlocks();
-		// 		if (playerCompletePanel) {
-		// 			this.getCompletedReward();
-		// 		}
-		// 		else {
-		// 			this.showPanelFinishedFeedback();
-		// 		}
-		// 	}
-		// }
+		if (this.checkEndGame()) {
+			if (this.currentState == Sushi.State.PLAYING) {
+				this.currentState = Sushi.State.PREPARING;
+				// var playerCompletePanel = this.playerCompletesPanel();
+				this.stopHintTimer();
+				// this.stopBrighTimer();
+				this.clearRemainingBlocks();
+				// if (playerCompletePanel) {
+				// 	this.getCompletedReward();
+				// }
+				// else {
+				// 	this.showPanelFinishedFeedback();
+				// }
+			}
+		}
+	},
+
+	checkEndGame: function () {
+		for (var i = 0; i < App.GAME_W; i++) {
+			for (var j = 0; j < App.GAME_H; j++) {
+				if (this.blocksArray[i][j] && this.blocksArray[i][j].checkConnected({
+					x: i,
+					y: j
+				})) {
+					return false;
+				}
+			}
+		}
+		return true;
+	},
+
+	clearRemainingBlocks:function () {
+		var tempGroup = this.game.add.group();
+		tempGroup.position.x = this.blocksGroup.position.x;
+		tempGroup.position.y = this.blocksGroup.position.y;
+		tempGroup.mask = this.mask;
+		for (var i = this.blocksArray.length - 1; i >= 0; i--) {
+			for (var j = this.blocksArray[i].length - 1; j >= 0; j--) {
+				if (this.blocksArray[i][j] != null) {
+					tempGroup.add(this.blocksArray[i][j]);
+					this.blocksArray[i][j].disableInput;
+					this.blocksArray[i][j] = null;
+				}
+			}
+		}
+		var tween = this.game.tween.add(tempGroup.position).to({
+			y: this.game.height + 50
+		}, 500, XEngine.Easing.Expo.InOut, true, 200);
+		tween.onComplete.add(function () {
+			this.callAll('kill');
+		}, tempGroup);
+		tween.onComplete.add(this.fillWithBlocks, this);
 	},
 
 	moveRight:function(emptyColumn){
@@ -371,7 +479,19 @@ Gameplay.prototype = {
 
 	increaseScore:function(amount){
 		this.score += amount;
-		this.scoreText.setText(this.score);
+		this.scoreText.setText(this.score + '');
+	},
+
+	resetBonus: function () {
+		if (this.currentBonus != 1) {
+			this.currentBonus = 1;
+			this.timeToLostBonus = 0;
+			this.comboImage.frame = 'x'.concat(this.currentBonus.toString());
+			var comboFall = this.game.add.sprite(this.comboBack.position.x, this.comboBack.position.y, App.GAMEPLAY_KEY, 'Combo_TextBox');
+			comboFall.anchor.setTo(0.5);
+			this.game.tween.add(comboFall).to({ alpha: 0, rotation: 30 }, 900, XEngine.Easing.Expo.In, true);
+			this.game.tween.add(comboFall.position).to({ y:'+30' }, 900, XEngine.Easing.Expo.In, true);
+		}
 	}
 	
 }

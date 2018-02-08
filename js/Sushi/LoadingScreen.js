@@ -32,20 +32,19 @@ LoadingScreen.prototype ={
 		this.game.load.jsonSpriteSheet(App.TUTORIAL_KEY, 'asset/UI/Tutorial.png', 'asset/json/Tutorial.json');
 		this.game.load.jsonSpriteSheet(App.GAME_LOGO_KEY, 'asset/UI/LogoAnimation.png', 'asset/json/LogoAnimation.json');
 		this.game.load.jsonSpriteSheet(App.COUNTDOWN_KEY, 'asset/gameplay/Countdown.png', 'asset/json/Countdown.json');
-		// this.load.bitmapFont(App.MAIN_FONT, 'fonts/Gang_font.png', 'fonts/Gang_font.xml');
-		// this.load.bitmapFont(App.DIGITS_BLUE_FONT, 'fonts/Digits_Blue.png', 'fonts/Digits_Blue.xml');
-		// this.load.bitmapFont(App.DIGITS_GREEN_FONT, 'fonts/Digits_Green.png', 'fonts/Digits_Green.xml');
-		// this.load.bitmapFont(App.DIGITS_PURPLE_FONT, 'fonts/Digits_Purple.png', 'fonts/Digits_Purple.xml');
-		// this.load.bitmapFont(App.DIGITS_RED_FONT, 'fonts/Digits_Red.png', 'fonts/Digits_Red.xml');
-		// this.load.bitmapFont(App.DIGITS_YELLOW_FONT, 'fonts/Digits_Yellow.png', 'fonts/Digits_Yellow.xml');
-		// this.load.bitmapFont(App.DIGITS_WHITE_FONT, 'fonts/Digits_White.png', 'fonts/Digits_White.xml');
-		// this.load.bitmapFont(App.TEXT_DARK, 'fonts/Text_Dark.png', 'fonts/Text_Dark.xml');
-		// this.load.bitmapFont(App.TEXT_GREEN, 'fonts/Text_Green.png', 'fonts/Text_Green.xml');
+		this.game.load.bitmapFont(App.MAIN_FONT, 'fonts/Gang_font.png', 'fonts/Gang_font.xml');
+		this.game.load.bitmapFont(App.DIGITS_BLUE_FONT, 'fonts/Digits_Blue.png', 'fonts/Digits_Blue.xml');
+		this.game.load.bitmapFont(App.DIGITS_GREEN_FONT, 'fonts/Digits_Green.png', 'fonts/Digits_Green.xml');
+		this.game.load.bitmapFont(App.DIGITS_PURPLE_FONT, 'fonts/Digits_Purple.png', 'fonts/Digits_Purple.xml');
+		this.game.load.bitmapFont(App.DIGITS_RED_FONT, 'fonts/Digits_Red.png', 'fonts/Digits_Red.xml');
+		this.game.load.bitmapFont(App.DIGITS_YELLOW_FONT, 'fonts/Digits_Yellow.png', 'fonts/Digits_Yellow.xml');
+		this.game.load.bitmapFont(App.DIGITS_WHITE_FONT, 'fonts/Digits_White.png', 'fonts/Digits_White.xml');
+		this.game.load.bitmapFont(App.TEXT_DARK, 'fonts/Text_Dark.png', 'fonts/Text_Dark.xml');
+		this.game.load.bitmapFont(App.TEXT_GREEN, 'fonts/Text_Green.png', 'fonts/Text_Green.xml');
 		this.game.load.image('timewarning', 'asset/gameplay/timewarning.png');
 	},
 
 	start:function(){
-		//this.game.state.start('SoundQuestion');
 		this.game.state.start('SoundQuestion');
 	},
 

@@ -49,7 +49,7 @@ Block.prototypeExtends = {
 			x: this.indexX,
 			y: this.indexY
 		})) {
-			//this.gameState.resetHintTimer();
+			this.gameState.resetHintTimer();
 			this.gameState.removeCells({
 				x: this.indexX,
 				y: this.indexY
@@ -127,17 +127,17 @@ Block.prototypeExtends = {
 		this.hintedBlock = true;
 		this.hintShine = this.game.add.sprite(0, 0, App.GAMEPLAY_KEY, 'sushi_hint');
 		this.hintShine.parent = this;
-		this.hintShine.anchor.setTo(0.5);
+		//this.hintShine.anchor.setTo(0.5);
 		this.shakeBlock();
 	},
 
 	shakeBlock:function(){
 		this.rotation = -8;
-		this.hintTween = this.game.add.tween(this).to({
+		this.hintTween = this.game.tween.add(this).to({
 			rotation: 8
 		}, 150, XEngine.Easing.Linear.None, true, 0, 1, true);
 		this.hintTween.onComplete.add(function () {
-			this.angle = 0;
+			this.rotation = 0;
 			//this.waitForNextShake();
 		}, this);
 	},

@@ -16,7 +16,8 @@ ConfirmationDialog.prototypeExtends = {
 		}, 300, XEngine.Easing.Back.Out, true);
 		var panel = this.game.add.sprite(0, 0, App.MENU_ITEMS_KEY, 'ConfirmationWindow');
 		panel.anchor.setTo(0.5);
-		var questionText = this.game.add.text(panel.position.x, panel.position.y - 60, message,{font_size: 32});
+		var questionText = this.game.add.bitmapText(panel.position.x, panel.position.y - 60, App.MAIN_FONT, message);
+		questionText.scale.setTo(0.7);
 		questionText.anchor.setTo(0.5);
 		var positiveButton = this.game.add.button(panel.position.x + 100, panel.position.y + 50, App.MENU_ITEMS_KEY, 'Ok', 'Ok_down', 'Ok');
 		positiveButton.onClick.addOnce(this.confirmationPressed, this);

@@ -58,9 +58,9 @@ MainMenu.prototype = {
 		sushiBlue.anchor.setTo(0.5);
 		sushiBlue.scale.setTo(0.3);
 		this.logoGroup.add(sushiBlue);
-		// this.game.tween.add(this.logoGroup).to({
-		// 	alpha: 1
-		// }, 300, XEngine.Easing.Expo.In, true, 300);
+		this.game.tween.add(this.logoGroup).to({
+			alpha: 1
+		}, 300, XEngine.Easing.Expo.In, true, 300);
 		this.game.tween.add(sushiRed.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.Expo.In, true);
 		this.game.tween.add(sushiGreen.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.Expo.In, true);
 		this.game.tween.add(sushiPurple.scale).to({ x: 1, y: 1 }, 600, XEngine.Easing.Expo.In, true);
